@@ -1,0 +1,33 @@
+---
+  - hosts: master
+    tasks:
+    
+      - name: install k3s on master node
+        shell: curl -sfL https://get.k3s.io | K3S_TOKEN=mynodetoken sh -
+      
+
+      - name: copy k3s.yaml from remote to host node - currently vagrant nfs
+        become: true
+        copy:
+          remote_src: yes
+          src: /etc/rancher/k3s/k3s.yaml
+          dest: /home/ubuntu/vagrant_data/k3s.yaml
+
+
+      - name: replace localhost to master node ip in kubeconfig file
+        replace:
+          path: ~/vagrant_data/k3s.yaml
+          regexp: '127.0.0.1'
+          replace: '10.10.1.4'
+
+
+
+##########################################################################
+
+  - hosts: worker
+    tasks:
+
+      - shell: curl -sfL https://get.k3s.io | K3S_URL=https://10.10.1.4:6443 K3S_TOKEN=mynodetoken sh -
+
+
+
