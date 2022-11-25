@@ -18,7 +18,7 @@
         replace:
           path: ~/vagrant_data/k3s.yaml
           regexp: '127.0.0.1'
-          replace: '10.10.1.4'
+          replace: "{{ansible_ssh_host}}"
 
 
 
@@ -27,7 +27,7 @@
   - hosts: worker
     tasks:
 
-      - shell: curl -sfL https://get.k3s.io | K3S_URL=https://10.10.1.4:6443 K3S_TOKEN=mynodetoken sh -
+      - shell: curl -sfL https://get.k3s.io | K3S_URL=https://"{{ groups.master.0 }}":6443 K3S_TOKEN=mynodetoken sh -
 
 
 
