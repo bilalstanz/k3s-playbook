@@ -8,3 +8,10 @@
 10.10.10.12
 10.10.10.13
 
+
+
+
+[all:vars]
+
+k3s_token = mynodetoken
+
